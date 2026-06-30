@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository, IsNull } from 'typeorm';
+import { DataSource, Repository, IsNull, Not } from 'typeorm';
 import { PomodoroSession } from '../entities/pomodoro-session.entity';
 
 @Injectable()
@@ -27,6 +27,12 @@ export class PomodoroSessionRepository extends Repository<PomodoroSession> {
       order: {
         startTime: 'DESC',
       },
+    });
+  }
+
+  async deleteAllCompletedSessions(): Promise<void> {
+    await this.delete({
+      endTime: Not(IsNull()),
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PomodoroSessionService } from './pomodoro-sessions.service';
 import { PomodoroSessionResponseDto } from './dto/pomodoro-session.response.dto';
@@ -43,5 +43,26 @@ export class PomodoroSessionController {
   })
   async getAllSessions(): Promise<PomodoroSessionResponseDto[]> {
     return this.sessionService.getAllSessions();
+  }
+
+  @Delete('reset')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Reset pomodoro session history' })
+  @ApiResponse({
+    status: 200,
+    description: 'Session history reset successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Pomodoro session history has been reset successfully',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  async resetHistory(): Promise<{ message: string }> {
+    return this.sessionService.resetHistory();
   }
 }

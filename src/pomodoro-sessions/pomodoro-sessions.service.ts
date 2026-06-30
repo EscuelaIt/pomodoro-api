@@ -51,4 +51,9 @@ export class PomodoroSessionService {
       excludeExtraneousValues: true,
     });
   }
+
+  async resetHistory(): Promise<{ message: string }> {
+    await this.sessionRepository.deleteAllCompletedSessions();
+    return { message: 'Pomodoro session history has been reset successfully' };
+  }
 }
